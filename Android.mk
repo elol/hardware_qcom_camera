@@ -1,5 +1,7 @@
 ifneq ($(USE_CAMERA_STUB),true)
-ifeq ($(TARGET_BOOTLOADER_BOARD_NAME),fb0)
+ifeq ($(strip $(BOARD_USES_QCOM_HARDWARE)), true)
+BUILD_LIBCAMERA:=true
+ifeq ($(BUILD_LIBCAMERA),true)
 
 # When zero we link against libmmcamera; when 1, we dlopen libmmcamera.
 DLOPEN_LIBMMCAMERA:=1
@@ -38,10 +40,11 @@ LOCAL_SHARED_LIBRARIES+= libgenlock libbinder
 LOCAL_SHARED_LIBRARIES+= libdl
 
 LOCAL_MODULE_PATH := $(TARGET_OUT_SHARED_LIBRARIES)/hw
-LOCAL_MODULE:= camera.$(TARGET_BOOTLOADER_BOARD_NAME)
+LOCAL_MODULE:= camera.$(TARGET_BOARD_PLATFORM)
 LOCAL_MODULE_TAGS := optional
 include $(BUILD_SHARED_LIBRARY)
 
 endif # BUILD_TINY_ANDROID
 endif # BUILD_LIBCAMERA
+endif # BOARD_USES_QCOM_HARDWARE
 endif # USE_CAMERA_STUB
